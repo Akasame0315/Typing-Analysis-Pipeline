@@ -1,0 +1,15 @@
+# 忽略依賴套件
+node_modules/
+
+# 忽略原始資料與分析結果（保護隱私）
+data/raw/keybr/*
+data/raw/monkeytype/*
+data/summary.json
+data/history/*
+
+# 保留資料夾結構但忽略內容(這是在資料夾內建立一個隱藏檔，確保 git 會追蹤資料夾但不追蹤內容)
+!data/raw/keybr/.gitkeep
+
+# 作業系統暫存檔
+.DS_Store
+Thumbs.db
