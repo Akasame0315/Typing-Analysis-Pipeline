@@ -13,18 +13,24 @@ function getISOWeekString(date) {
 function normalizeKeybr(filePath) {
   const rawData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   return rawData.map(session => {
-    // Keybr 的 timeStamp 需要轉成毫秒 (視原始資料格式而定，通常是秒或毫秒)
     const dateObj = new Date(session.timeStamp); 
     
+    // ✅ Keybr: CPM → WPM
+    const wpm = session.speed ? session.speed / 5 : 0;
+
     return {
       id: `keybr-${session.timeStamp}`, 
       source: 'keybr',
       timestamp: dateObj.toISOString(),
-      week: getISOWeekString(dateObj), // 加入週數標籤
-      speed: session.speed,
+      week: getISOWeekString(dateObj),
+
+      // 🔥 這行是關鍵修改
+      speed: parseFloat(wpm.toFixed(2)),
+
       errors: session.errors,
       length: session.length,
       time: session.time,
+
       histogram: session.histogram ? session.histogram.map(h => ({
         char: String.fromCharCode(h.codePoint),
         hit: h.hitCount,
